@@ -81,8 +81,9 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
   
-      const response = await fetch("https://administrator-beauty-forbes-montreal.trycloudflare.com/api/bundleGetData", {
+      const response = await fetch("https://acute-outlined-jewelry-zus.trycloudflare.com/api/bundleGetData", {
         method: "POST",
+        redirect: 'follow',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: bundleName, items: bundleItems }),
       });
