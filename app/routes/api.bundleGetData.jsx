@@ -5,6 +5,19 @@ import { cors } from "remix-utils/cors";
 
 
 export async function action({ request }) {
+
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*", 
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
+  }
+
+
   console.log('request data from frontend--->',request);
   const { name, items } = await request.json();
   console.log('name--->',name,'items-->',items);
@@ -18,52 +31,27 @@ export async function action({ request }) {
 console.log('allItem->',allItem)
 
   try {
-    // const response = await shopify.graphql(
-    //   `
-    //   mutation {
-    //     productCreate(input: {
-    //       title: "${name}",
-    //       productType: "Bundle",
-    //       variants: [
-    //         ${items
-    //           .map(
-    //             (item) => `{
-    //           sku: "${item.variantId}",
-    //           inventoryQuantity: ${item.quantity}
-    //         }`
-    //           )
-    //           .join(",")}
-    //       ]
-    //     }) {
-    //       product {
-    //         id
-    //         title
-    //         variants(first: 1) {
-    //           edges {
-    //             node {
-    //               id
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // `
-    // );
+  
 
-    // const product = response.data.productCreate.product;
-    // const variantId = product.variants.edges[0].node.id;
-
-    return cors(request, json({ 
-      success: true, 
-      product: { id: '123', title: 'product.title' } 
-    }), {
-      origin: "https://dev-rfq.myshopify.com",  //s ✅ Allowed Origin
-      methods: ["GET", "POST", "OPTIONS"],     // ✅ Allowed Methods
-      headers: ["Content-Type", "Authorization"],  // ✅ Allowed Headers
-    });
+    return cors(
+      request, 
+      json({ success: true, product: { id: "123", title: "product.durgesh" } }),
+      {
+        origin: "https://dev-rfq.myshopify.com",  // Change this to your allowed domain in production
+        methods: ["GET", "POST", "OPTIONS"],
+        headers: ["Content-Type", "Authorization"],
+      }
+    );
   } catch (error) {
     console.error(error);
-    return cors(request, json({ success: false, error: "Failed to create bundle" }, { status: 500 }));
+    return cors(
+      request, 
+      json({ success: false, error: "Failed to create bundle" }, { status: 500 }),
+      {
+        origin: "https://dev-rfq.myshopify.com", 
+        methods: ["GET", "POST", "OPTIONS"],
+        headers: ["Content-Type", "Authorization"],
+      }
+    );
   }
 }

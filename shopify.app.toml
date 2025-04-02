@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "2d5818506099a3dbaa570eadbf98e793"
-application_url = "https://administrator-beauty-forbes-montreal.trycloudflare.com"
+application_url = "https://acute-outlined-jewelry-zus.trycloudflare.com"
 embedded = true
 name = "RFQ"
 handle = "rfq-4"
@@ -23,9 +23,9 @@ scopes = "read_content,read_inventory,read_product_listings,read_products,write_
 
 [auth]
 redirect_urls = [
-  "https://administrator-beauty-forbes-montreal.trycloudflare.com/auth/callback",
-  "https://administrator-beauty-forbes-montreal.trycloudflare.com/auth/shopify/callback",
-  "https://administrator-beauty-forbes-montreal.trycloudflare.com/api/auth/callback"
+  "https://acute-outlined-jewelry-zus.trycloudflare.com/auth/callback",
+  "https://acute-outlined-jewelry-zus.trycloudflare.com/auth/shopify/callback",
+  "https://acute-outlined-jewelry-zus.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
