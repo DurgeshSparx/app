@@ -32,10 +32,11 @@ model Session {
 }
 
 model Contectus {
-  id                        String    @id
+  id                        Int    @id @default(autoincrement())  // ✅ This auto-generates the ID
   neme                      String
   email                     String
   subject                   String
   Collaborator_request_code String
   Content                   String
+  createdAt                 DateTime @default(now())
 }
