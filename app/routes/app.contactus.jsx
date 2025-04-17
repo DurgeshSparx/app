@@ -36,6 +36,7 @@ export const action = async ({ request }) => {
 export default function ContactUs() {
   const app = useAppBridge(); // useAppBridge ko yaha call karo
   const actionData = useActionData(); // Action response le rahe hain
+  const [showList, setShowList] = useState(false);
 
   const [toastActive, setToastActive] = useState(false);
   const [contactus, setContactus] = useState({
@@ -67,7 +68,15 @@ useEffect(() => {
 
   return (
     <Frame>
-      <Page title="Contact Us">
+      <Page title="Contact Us"
+      primaryAction={{
+        content: "My inquiry",
+        onAction: () => {
+          console.log("Button clicked!");
+        }
+      }}
+      >
+    
         <Card>
           <Form method="POST">
             <FormLayout>
@@ -124,13 +133,13 @@ useEffect(() => {
                 />
               </FormLayout.Group>
               <FormLayout.Group>
-                <Button submit={true} variant="primary">
-                  Submit
-                </Button>
+                <Button submit={true} variant="primary">Submit</Button>
               </FormLayout.Group>
             </FormLayout>
           </Form>
         </Card>
+
+
       </Page>
     </Frame>
   );

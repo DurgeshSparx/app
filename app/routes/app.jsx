@@ -23,6 +23,7 @@ export default function App() {
           Home
         </Link>
         <Link to="/app/additionalscript">Additional Script</Link>
+        <Link to="/app/createCheckoutLink">generate checkout link</Link>
         <Link to="/app/products">Products</Link>
         <Link to="/app/contactus">Contact Us</Link>
         <Link to="/app/settings">Settings</Link>
