@@ -81,10 +81,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
   
-      const response = await fetch("https://acute-outlined-jewelry-zus.trycloudflare.com/api/bundleGetData", {
+      const response = await fetch("https://dev-rfq.myshopify.com/apps/proxyhit", {
         method: "POST",
         redirect: 'follow',
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://dev-rfq.myshopify.com/',
+      },
         body: JSON.stringify({ name: bundleName, items: bundleItems }),
       });
   
