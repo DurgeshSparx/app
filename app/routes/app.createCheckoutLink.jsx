@@ -12,17 +12,25 @@ import {
 import { DeleteIcon } from "@shopify/polaris-icons";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { authenticate } from "../shopify.server";
+//import { loader } from "../model/token.server";
 
-export const loader = async ({ request }) => {
+
+
+// export const loader = async ({ request }) => {
   
-  const session = await authenticate.admin(request);
-    return session;
-  }
+//    const session = await authenticate.admin(request);
+  
+//   // const unauth = await unauthenticated.storefront("dev-rfq.myshopify.com");
+
+//   // return json({  unauth });
+//   }
 
 
 export default function CreateCheckoutLink() {
-  const session = useLoaderData();
+//   
+//   const { unauth } = useLoaderData();
+// console.log('unauthenticated-->',unauth,'token->>',sftoken);
+
   const [productList, setProductList] = useState([]);
   const [checkoutUrl, setCheckoutUrl] = useState("");
   const [formErrors, setFormErrors] = useState({});
@@ -72,24 +80,27 @@ export default function CreateCheckoutLink() {
         quantity: 1,
       }))
     );
-
-    const res = await fetch("/app/checkoutlink", {
+console.log('lineItems',lineItems);
+    const res = await fetch("/api/serverToken", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
-        lineItems,
-        auth:session
+        lineItems
       }),
     });
 
     const data = await res.json();
-    setCheckoutUrl(data.checkoutUrl);
+    console.log('return from servertoken...');
+    // setCheckoutUrl(data.checkoutUrl);
    
   };
 
   useEffect(()=>{
     console.log('productList-->',productList);
   },[productList])
+
+
+
   return (
     <Page
       title="Generate Checkout Link"
