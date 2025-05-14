@@ -45,7 +45,7 @@ model Contectus {
   createdAt                 DateTime @default(now())
 }
 
-model Shop {
+model Shop_Storefront_Token {
   id                      Int      @id @default(autoincrement())
   shop                    String   @unique
   storefrontAccessToken   String?

@@ -14,7 +14,9 @@ import { Form, json, useActionData } from "@remix-run/react";
 import { useState, useEffect } from "react";
 // last step connect database and insert new data
 import prisma from "../db.server";
+export const loader = async({ request })=>{
 
+}
 export const action = async ({ request }) => {
   let settings = await request.formData();
   settings = Object.fromEntries(settings);
