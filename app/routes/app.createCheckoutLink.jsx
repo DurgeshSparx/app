@@ -12,6 +12,7 @@ import {
 import { DeleteIcon } from "@shopify/polaris-icons";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { useAppBridge } from "@shopify/app-bridge-react";
 //import { loader } from "../model/token.server";
 
 
@@ -27,6 +28,7 @@ import { useEffect, useState } from "react";
 
 
 export default function CreateCheckoutLink() {
+  const app = useAppBridge(); // useAppBgride ko yaha call karo
 //   
 //   const { unauth } = useLoaderData();
 // console.log('unauthenticated-->',unauth,'token->>',sftoken);
@@ -75,10 +77,12 @@ export default function CreateCheckoutLink() {
 
   const handleSubmit = async () => {
     const lineItems = productList.flatMap((product) =>
+      
       product.variants.map((variant) => ({
         variantId: variant.id,
-        quantity: 1,
+        quantity: variant.quantity,
       }))
+      
     );
 console.log('lineItems',lineItems);
     const res = await fetch("/api/serverToken", {
@@ -90,22 +94,57 @@ console.log('lineItems',lineItems);
     });
 
     const data = await res.json();
-    console.log('return from servertoken...');
-    // setCheckoutUrl(data.checkoutUrl);
+    console.log('return from servertoken...',data);
+    setCheckoutUrl(data.checkoutLink);
    
   };
 
   useEffect(()=>{
-    console.log('productList-->',productList);
-  },[productList])
+    console.log('new productList-->',productList);
+    if (checkoutUrl) {
+      console.log('checkout Url-->', checkoutUrl);
+    }
+  
+   
+  },[productList,checkoutUrl])
 
 
+  const handleDeleteVariant = (productIndex, variantIndex) => {
+    const updatedList = [...productList];
+    updatedList[productIndex].variants.splice(variantIndex, 1);
+  
+    // Remove product if no variants remain
+    if (updatedList[productIndex].variants.length === 0) {
+      updatedList.splice(productIndex, 1);
+      setCheckoutUrl('');
+    }
+  
+    setProductList(updatedList);
+  };
+  
+  const handleQuantityChange = (productIndex, variantIndex, newQty) => {
+    const updatedList = [...productList];
+    updatedList[productIndex].variants[variantIndex].quantity = newQty;
+    setProductList(updatedList);
+  };
+ 
+const handleCopy = async () => {
+  if (checkoutUrl) {
+    try {
+      await navigator.clipboard.writeText(checkoutUrl);
+    
+      app.toast.show("✅ Link copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  }
+};
 
   return (
     <Page
       title="Generate Checkout Link"
       primaryAction={{
-        content: "Save",
+        content: "Generate",
         onAction: handleSubmit,
         disabled: productList.length === 0,
       }}
@@ -141,11 +180,74 @@ console.log('lineItems',lineItems);
             </InlineGrid>
           </BlockStack>
         </Card>
+        {productList.length > 0 && (
+  <Card title="Selected Products" sectioned>
+    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <thead>
+        <tr>
+          <th style={{ textAlign: "left", padding: "8px" }}>Product</th>
+          <th style={{ textAlign: "left", padding: "8px" }}>Variant</th>
+          <th style={{ textAlign: "left", padding: "8px" }}>Price</th>
+          <th style={{ textAlign: "left", padding: "8px" }}>Qty</th>
+          <th style={{ textAlign: "left", padding: "8px" }}>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {productList.map((product, productIndex) =>
+          product.variants.map((variant, variantIndex) => (
+            <tr key={`${product.id}-${variant.id}`}>
+              <td style={{ padding: "8px" }}>{product.title}</td>
+              <td style={{ padding: "8px" }}>{variant.title}</td>
+              <td style={{ padding: "8px" }}>₹{variant.price.toFixed(2)}</td>
+              <td style={{ padding: "8px", width: "80px" }}>
+                <TextField
+                  type="number"
+                  value={String(variant.quantity)}
+                  onChange={(value) =>
+                    handleQuantityChange(productIndex, variantIndex, parseInt(value))
+                  }
+                  autoComplete="off"
+                />
+              </td>
+              <td style={{ padding: "8px" }}>
+              <Button
+                variant="plain"
+                destructive
+                icon={DeleteIcon}
+                onClick={() => handleDeleteVariant(productIndex, variantIndex)}
+              />
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </Card>
+)}
+{checkoutUrl && (
+  <Card title="Checkout Link" sectioned>
+    <BlockStack gap="300">
+      <TextField
+        label="Generated Checkout URL"
+        value={checkoutUrl}
+        readOnly
+        autoComplete="off"
+      />
+   
+             
+    </BlockStack>
+    <InlineGrid columns="auto">
+     <Button  fullWidth={false} size="medium" variant="primary" onClick={handleCopy}>Copy</Button>
+     
+     </InlineGrid>
+  </Card>
+)}
+
       </Form>
 
       <PageActions
         primaryAction={{
-          content: "Save",
+          content: "Generate",
           onAction: handleSubmit,
           disabled: productList.length === 0,
         }}

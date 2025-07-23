@@ -117,8 +117,7 @@ export default function Index() {
     } else {
       console.log('Picker was cancelled by the user');
     }
-    
-    }
+  }
 
 
   return (

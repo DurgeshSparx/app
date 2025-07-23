@@ -30,6 +30,7 @@ export default function App() {
         <Link to="/app/dataTable">Data Table</Link>
         <Link to="/app/collection">Collection</Link>
         <Link to="/api/getCollections">get Collections</Link>
+        <Link to="/app/inquiryList">inquiry list</Link>
         <Link to="/app/ResourceListWithBulkActionsAndPagination">ResourceListWithBulkActionsAndPagination</Link>
       </NavMenu>
       <Outlet />
