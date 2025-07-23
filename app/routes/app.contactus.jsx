@@ -11,12 +11,12 @@ import {
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { Form, json, useActionData } from "@remix-run/react";
+
 import { useState, useEffect } from "react";
 // last step connect database and insert new data
 import prisma from "../db.server";
-export const loader = async({ request })=>{
+import "@shopify/shopify-app-remix/adapters/node";
 
-}
 export const action = async ({ request }) => {
   let settings = await request.formData();
   settings = Object.fromEntries(settings);
@@ -32,12 +32,62 @@ export const action = async ({ request }) => {
     },
   })
 
+// create meta-object
+const name = 'name';
+  const email = 'email';
+  const phone = 'phone';
+  const message = 'metaobject';
+
+  const mutation = `
+    mutation CreateMetaobject($metaobject: MetaobjectCreateInput!) {
+      metaobjectCreate(metaobject: $metaobject) {
+        metaobject {
+          id
+          handle
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    metaobject: {
+      type: "contact_entry",
+      fields: [
+        { key: "name", value: name },
+        { key: "email", value: email },
+        { key: "phone", value: phone },
+        { key: "message", value: message },
+      ],
+    },
+  };
+
+  const response = await admin.graphql(mutation, { variables });
+  const result = await response.json();
+
+  if (result.data.metaobjectCreate.userErrors.length > 0) {
+    return json({ error: result.data.metaobjectCreate.userErrors });
+  }
+
+  //return redirect("/success");
+
   return json({ success: true, message: "Thank you, we will connect soon" });
 };
 
 export default function ContactUs() {
+ 
+  const DEVELOPER_EMAIL =  process.env.DEVELOPER_EMAIL;
+  console.log(DEVELOPER_EMAIL);
   const app = useAppBridge(); // useAppBridge ko yaha call karo
   const actionData = useActionData(); // Action response le rahe hain
+
+  // const handleRedirect = () => {
+   
+  // };
+
   const [showList, setShowList] = useState(false);
 
   const [toastActive, setToastActive] = useState(false);
@@ -73,9 +123,11 @@ useEffect(() => {
       <Page title="Contact Us"
       primaryAction={{
         content: "My inquiry",
-        onAction: () => {
-          console.log("Button clicked!");
-        }
+        url: "/app/inquiryList", // Remix rout
+        // onAction: () => {
+        //   const redirect = Redirect.create(app);
+        //   redirect.dispatch(Redirect.Action.APP, "/inquiryList"); // 👈 app route
+        // }
       }}
       >
     

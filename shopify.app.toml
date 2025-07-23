@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "2d5818506099a3dbaa570eadbf98e793"
-application_url = "https://projects-terminals-ralph-donations.trycloudflare.com"
+application_url = "https://undertaken-dress-minimal-cal.trycloudflare.com"
 embedded = true
 name = "RFQ"
 handle = "rfq-4"
@@ -19,13 +19,13 @@ api_version = "2025-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_content,read_inventory,read_product_listings,read_products,write_content,write_discounts,write_products,write_customers,write_cart_transforms,unauthenticated_read_checkouts,unauthenticated_write_checkouts,unauthenticated_read_product_listings"
+scopes = "write_metaobject_definitions,read_content,read_inventory,read_product_listings,read_products,write_content,write_discounts,write_products,write_customers,write_cart_transforms,unauthenticated_read_checkouts,unauthenticated_write_checkouts,unauthenticated_read_product_listings"
 
 [auth]
 redirect_urls = [
-  "https://projects-terminals-ralph-donations.trycloudflare.com/auth/callback",
-  "https://projects-terminals-ralph-donations.trycloudflare.com/auth/shopify/callback",
-  "https://projects-terminals-ralph-donations.trycloudflare.com/api/auth/callback"
+  "https://undertaken-dress-minimal-cal.trycloudflare.com/auth/callback",
+  "https://undertaken-dress-minimal-cal.trycloudflare.com/auth/shopify/callback",
+  "https://undertaken-dress-minimal-cal.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
